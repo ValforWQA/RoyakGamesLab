@@ -1,0 +1,615 @@
+
+:root{
+  --rail:#121212;
+  --rail-hover:#1b1b1b;
+  --panel:#101410;
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.64);
+  --line:rgba(255,255,255,.09);
+  --blue:#3478df;
+  --blue2:#2864c2;
+  --green:#69d985;
+  --green-bg:rgba(62,155,85,.24);
+  --amber:#f3c45a;
+  --amber-bg:rgba(181,132,35,.24);
+  --offline:#999;
+  --offline-bg:rgba(130,130,130,.19);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090909;color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}
+button{font:inherit}
+button:focus-visible{outline:2px solid #6da4ff;outline-offset:2px}
+
+.app{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr);
+  background:#0b0d0b;
+}
+
+.rail{
+  position:relative;
+  z-index:20;
+  min-height:0;
+  background:var(--rail);
+  border-right:1px solid rgba(255,255,255,.055);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:7px 0 10px;
+  -webkit-app-region:drag;
+  user-select:none;
+}
+
+.brandButton{
+  width:56px;height:56px;
+  display:grid;place-items:center;
+  border-radius:11px;
+  background:transparent;
+  overflow:hidden;
+}
+.brandButton img{
+  width:54px;
+  height:54px;
+  object-fit:contain;
+  display:block;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.42));
+}
+
+.railDivider{
+  width:44px;height:1px;
+  background:var(--line);
+  margin:11px 0 10px;
+}
+
+.serverRail{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:11px;
+  overflow:auto;
+  padding:0 0 8px;
+  -webkit-app-region:no-drag;
+  scrollbar-width:none;
+}
+.serverRail::-webkit-scrollbar{display:none}
+
+.serverIcon{
+  position:relative;
+  width:52px;height:52px;
+  border:1px solid transparent;
+  border-radius:12px;
+  padding:0;
+  overflow:hidden;
+  background:#1b1b1b;
+  color:#ddd;
+  cursor:pointer;
+  transition:transform .12s ease,border-color .12s ease,opacity .12s ease,filter .12s ease;
+}
+.serverIcon img{width:100%;height:100%;display:block;object-fit:cover}
+.serverIcon .iconFallback{width:100%;height:100%;display:grid;place-items:center;font-size:12px;font-weight:800}
+.serverIcon .railState{
+  position:absolute;
+  right:3px;bottom:3px;
+  width:9px;height:9px;border-radius:50%;
+  border:1px solid rgba(0,0,0,.7);
+  background:var(--green);
+}
+.serverIcon.maintenance .railState{background:var(--amber)}
+.serverIcon.offline .railState{background:#7f7f7f}
+.serverIcon.selected{border-color:#4d8cef;box-shadow:0 0 0 1px rgba(77,140,239,.18)}
+.serverIcon.offline{filter:grayscale(1);opacity:.34;cursor:not-allowed}
+.serverIcon.maintenance{filter:saturate(.65);opacity:.58;cursor:not-allowed}
+.serverIcon:not(:disabled):hover{transform:translateY(-1px);border-color:#6ca0ee}
+
+.railBottom{
+  margin-top:auto;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  -webkit-app-region:no-drag;
+}
+.settingsButton{
+  width:46px;height:46px;
+  border:1px solid transparent;
+  border-radius:11px;
+  background:transparent;
+  color:#bababa;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+  transition:background .12s ease,color .12s ease,border-color .12s ease;
+}
+.settingsButton:hover,.settingsButton.active{
+  background:#1f1f1f;
+  color:#fff;
+  border-color:rgba(255,255,255,.08);
+}
+.versionText{font-size:9px;color:#737373;line-height:1}
+
+.stage{position:relative;min-width:0;min-height:0;background:#0b0d0b}
+
+.hero{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,rgba(4,7,5,.84) 0%,rgba(4,7,5,.45) 47%,rgba(4,7,5,.08) 77%),
+    radial-gradient(circle at 77% 32%,rgba(70,112,63,.42),transparent 28%),
+    linear-gradient(135deg,#304a57,#23372b 50%,#10170f);
+  background-size:cover;
+  background-position:center;
+}
+.heroShade{
+  position:absolute;inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(0deg,rgba(3,4,3,.9) 0%,rgba(3,4,3,.23) 36%,transparent 67%),
+    linear-gradient(90deg,rgba(4,5,4,.25),transparent 70%);
+}
+.windowControls{
+  position:absolute;
+  z-index:6;
+  right:8px;top:5px;
+  display:flex;
+  -webkit-app-region:no-drag;
+}
+.windowControls button{
+  width:42px;height:36px;
+  border:0;
+  background:transparent;
+  color:rgba(255,255,255,.83);
+  cursor:pointer;
+  font-size:18px;
+}
+.windowControls button:hover{background:rgba(255,255,255,.08)}
+#closeBtn:hover{background:#a83838;color:white}
+
+.heroContent{
+  position:relative;
+  z-index:3;
+  width:min(690px,62%);
+  min-width:500px;
+  padding-left:30px;
+  margin-left:0;
+  top:50%;
+  transform:translateY(-50%);
+}
+.serverLogo{
+  display:block;
+  max-width:470px;
+  max-height:175px;
+  object-fit:contain;
+  object-position:left center;
+  margin:0 0 20px;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,.42));
+}
+.hidden{display:none!important}
+.fallbackTitle{
+  font-weight:950;
+  font-size:42px;
+  letter-spacing:-.035em;
+  margin-bottom:17px;
+  text-shadow:0 4px 18px rgba(0,0,0,.5);
+}
+.description{
+  max-width:620px;
+  margin:0;
+  font-size:15px;
+  line-height:1.58;
+  font-weight:650;
+  color:rgba(255,255,255,.93);
+  text-shadow:0 2px 8px rgba(0,0,0,.55);
+}
+
+.actions{display:flex;align-items:center;gap:12px;margin-top:24px;flex-wrap:wrap}
+.playButton,.secondaryButton{
+  min-height:50px;
+  border-radius:25px;
+  padding:0 20px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  font-size:15px;
+  font-weight:850;
+  cursor:pointer;
+  transition:transform .18s ease,filter .18s ease,background .18s ease,border-color .18s ease,opacity .18s ease,box-shadow .18s ease;
+}
+.playButton{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.24);
+  min-width:224px;
+  min-height:62px;
+  padding:0 18px 0 12px;
+  justify-content:flex-start;
+  gap:12px;
+  color:white;
+  background:linear-gradient(135deg,#438cff 0%,#286bd7 48%,#2059b6 100%);
+  box-shadow:0 12px 34px rgba(15,65,145,.34),inset 0 1px rgba(255,255,255,.26),inset 0 -1px rgba(0,0,0,.18);
+}
+.playButton::before{
+  content:"";position:absolute;inset:1px;border-radius:inherit;z-index:-1;
+  background:radial-gradient(circle at 28% 0%,rgba(255,255,255,.22),transparent 38%);
+}
+.playButton::after{
+  content:"";position:absolute;top:-80%;left:-45%;width:34%;height:260%;z-index:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);
+  transform:rotate(18deg);transition:left .55s cubic-bezier(.2,.7,.2,1);pointer-events:none;
+}
+.playButton:not(:disabled):hover{
+  transform:translateY(-2px) scale(1.015);
+  filter:brightness(1.07);
+  box-shadow:0 16px 42px rgba(18,75,170,.44),0 0 0 1px rgba(104,167,255,.24),inset 0 1px rgba(255,255,255,.3);
+}
+.playButton:not(:disabled):hover::after{left:118%}
+.playButton:not(:disabled):active{transform:translateY(0) scale(.99)}
+.playGlow{position:absolute;inset:auto 12% -28px 12%;height:44px;border-radius:50%;background:rgba(90,163,255,.48);filter:blur(24px);z-index:-2}
+.playIconWrap{
+  position:relative;z-index:1;flex:0 0 auto;width:40px;height:40px;border-radius:14px;
+  display:grid;place-items:center;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.2);
+  box-shadow:inset 0 1px rgba(255,255,255,.18),0 5px 13px rgba(0,0,0,.18);
+}
+.playTriangle{font-size:14px;transform:translateX(1px);text-shadow:0 2px 5px rgba(0,0,0,.25)}
+.playCopy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;line-height:1.05;min-width:112px}
+.playMainText{font-size:14px;font-weight:950;letter-spacing:.035em}
+.playSubText{margin-top:5px;font-size:8px;font-weight:800;letter-spacing:.16em;color:rgba(255,255,255,.58)}
+.playArrow{position:relative;z-index:1;margin-left:auto;font-size:27px;line-height:1;color:rgba(255,255,255,.7);transform:translateY(-1px);transition:transform .18s ease,color .18s ease}
+.playButton:not(:disabled):hover .playArrow{transform:translate(3px,-1px);color:#fff}
+.playButton:disabled{
+  cursor:not-allowed;background:linear-gradient(135deg,#595d63,#44474c);color:#c7c9cc;
+  border-color:rgba(255,255,255,.08);box-shadow:none;opacity:.62;
+}
+.playButton:disabled .playGlow{display:none}
+.playButton:disabled .playIconWrap{background:rgba(255,255,255,.08);box-shadow:none}
+.playButton:disabled .playSubText{color:rgba(255,255,255,.38)}
+.secondaryButton{
+  min-height:50px;
+  border-radius:25px;
+  padding:0 20px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  font-size:15px;
+  font-weight:850;
+  cursor:pointer;
+  transition:transform .12s ease,filter .12s ease,background .12s ease,border-color .12s ease,opacity .12s ease;
+}
+.playButton{
+  border:0;
+  min-width:160px;
+  color:white;
+  background:linear-gradient(180deg,#3d82e8,#2d68c8);
+  box-shadow:0 8px 24px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.16);
+}
+.playButton:not(:disabled):hover{transform:translateY(-1px);filter:brightness(1.06)}
+.playButton:disabled{
+  cursor:not-allowed;
+  background:linear-gradient(#747474,#5c5c5c);
+  color:#d2d2d2;
+  box-shadow:none;
+  opacity:.68;
+}
+.secondaryButton{
+  border:1px solid rgba(255,255,255,.78);
+  background:rgba(8,8,8,.18);
+  color:#fff;
+  min-width:170px;
+  backdrop-filter:blur(3px);
+}
+.secondaryButton:hover{background:rgba(255,255,255,.09);transform:translateY(-1px)}
+.discordMark{font-size:18px}
+
+.serverInfo{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:18px;
+  min-height:28px;
+}
+.statusBadge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:26px;
+  padding:0 12px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.03em;
+}
+.statusBadge.online{background:var(--green-bg);color:#bff8cc}
+.statusBadge.offline{background:var(--offline-bg);color:#b7b7b7}
+.statusBadge.maintenance{background:var(--amber-bg);color:#ffe29a}
+.statusBadge.loading{background:rgba(255,255,255,.1);color:#ccc}
+.infoItem{font-size:10px;color:rgba(255,255,255,.42)}
+.infoItem b{color:rgba(255,255,255,.88);font-weight:750}
+.launchMessage{margin-top:10px;color:rgba(255,255,255,.48);font-size:10px;min-height:14px}
+.feedMessage{
+  position:absolute;
+  left:30px;bottom:24px;
+  z-index:4;
+  padding:8px 11px;
+  border-radius:7px;
+  background:rgba(115,41,41,.78);
+  border:1px solid rgba(255,130,130,.3);
+  color:#ffd1d1;
+  font-size:10px;
+  backdrop-filter:blur(4px);
+}
+
+.settingsMenu{
+  position:absolute;
+  z-index:50;
+  left:89px;
+  bottom:47px;
+  width:210px;
+  padding:8px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:11px;
+  background:#171717;
+  box-shadow:0 16px 42px rgba(0,0,0,.46);
+  -webkit-app-region:no-drag;
+}
+.settingsMenu button{
+  width:100%;
+  min-height:38px;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  color:#fff;
+  text-align:left;
+  padding:0 11px;
+  cursor:pointer;
+  font-size:12px;
+}
+.settingsMenu button:hover{background:#252525}
+.settingsMenu button:disabled{color:#666;cursor:not-allowed;background:transparent}
+.menuDivider{height:1px;background:rgba(255,255,255,.09);margin:5px 1px}
+
+.toast{
+  position:absolute;
+  z-index:100;
+  right:18px;
+  bottom:18px;
+  max-width:350px;
+  border-radius:9px;
+  padding:11px 14px;
+  background:rgba(18,18,18,.94);
+  border:1px solid rgba(255,255,255,.1);
+  color:#fff;
+  font-size:11px;
+  box-shadow:0 12px 30px rgba(0,0,0,.4);
+}
+
+@media(max-width:900px){
+  .heroContent{width:75%;min-width:0;padding-left:24px}
+  .fallbackTitle{font-size:34px}
+  .description{font-size:13px}
+}
+
+/* v1.7.0 — server theming, country flags, launch states, settings modal */
+:root{
+  --server-play-color:#438cff;
+  --server-play-hover:#4c94ff;
+  --server-play-text:#fff;
+  --server-discord-color:rgba(8,8,8,.18);
+  --server-discord-text:#fff;
+  --server-accent:#438cff;
+}
+
+.playersInfo b,#playerCount{
+  color:#63e68a!important;
+  text-shadow:0 0 12px rgba(66,226,117,.28);
+}
+.regionInfo{display:inline-flex;align-items:center;gap:5px}
+.countryFlag{
+  width:20px;
+  height:14px;
+  object-fit:cover;
+  border-radius:2px;
+  box-shadow:0 1px 3px rgba(0,0,0,.55);
+  transform:translateY(-.5px);
+}
+
+/* JSON-driven game buttons */
+.playButton{
+  background:linear-gradient(135deg,var(--server-play-color),color-mix(in srgb,var(--server-play-color) 78%,#000))!important;
+  color:var(--server-play-text)!important;
+  border-color:color-mix(in srgb,var(--server-play-color) 64%,#fff)!important;
+  box-shadow:0 12px 34px color-mix(in srgb,var(--server-play-color) 34%,transparent),inset 0 1px rgba(255,255,255,.24)!important;
+}
+.playButton:not(:disabled):hover{
+  background:linear-gradient(135deg,var(--server-play-hover),color-mix(in srgb,var(--server-play-hover) 76%,#000))!important;
+  box-shadow:0 16px 42px color-mix(in srgb,var(--server-play-hover) 42%,transparent),0 0 0 1px color-mix(in srgb,var(--server-play-hover) 30%,transparent)!important;
+}
+.secondaryButton{
+  background:var(--server-discord-color)!important;
+  color:var(--server-discord-text)!important;
+  border-color:color-mix(in srgb,var(--server-discord-text) 55%,transparent)!important;
+}
+
+.playButton.launching{
+  background:linear-gradient(135deg,#446078,#253a4d)!important;
+  animation:launchPulse 1s ease-in-out infinite;
+}
+.playButton.success{
+  background:linear-gradient(135deg,#21b95a,#14783b)!important;
+  color:#effff4!important;
+  border-color:rgba(140,255,177,.65)!important;
+  box-shadow:0 0 18px rgba(42,235,105,.42),0 12px 34px rgba(18,123,55,.38),inset 0 1px rgba(255,255,255,.28)!important;
+  opacity:1!important;
+}
+.playButton.error{
+  background:linear-gradient(135deg,#db3f49,#84212b)!important;
+  color:#fff4f4!important;
+  border-color:rgba(255,130,139,.7)!important;
+  box-shadow:0 0 20px rgba(255,54,69,.48),0 12px 34px rgba(123,18,27,.38),inset 0 1px rgba(255,255,255,.24)!important;
+  opacity:1!important;
+}
+.playButton.success:disabled,.playButton.error:disabled,.playButton.launching:disabled{opacity:1!important}
+.launchMessage.success{color:#6bf095;text-shadow:0 0 12px rgba(48,239,105,.35);font-weight:800}
+.launchMessage.error{color:#ff7079;text-shadow:0 0 12px rgba(255,48,65,.38);font-weight:800}
+.launchMessage.launching{color:#a9c8e8}
+@keyframes launchPulse{50%{filter:brightness(1.15);box-shadow:0 0 20px rgba(94,170,255,.28)}}
+
+/* Full launcher settings modal, retaining the original menu language. */
+.settingsBackdrop{
+  position:absolute;
+  inset:0;
+  z-index:90;
+  display:grid;
+  place-items:center;
+  background:rgba(0,0,0,.58);
+  backdrop-filter:blur(9px) saturate(.8);
+  -webkit-app-region:no-drag;
+  animation:settingsBackdropIn .16s ease-out;
+}
+.settingsModal{
+  width:min(390px,calc(100vw - 120px));
+  padding:0;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+  background:linear-gradient(180deg,#1b1b1b,#141414);
+  box-shadow:0 28px 80px rgba(0,0,0,.62),0 0 0 1px rgba(0,0,0,.35);
+  animation:settingsModalIn .18s cubic-bezier(.18,.75,.25,1);
+}
+.settingsHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 18px 13px;
+  border-bottom:1px solid rgba(255,255,255,.075);
+}
+.settingsTitle{font-size:15px;font-weight:850;color:#fff;letter-spacing:.01em}
+.settingsSubtitle{margin-top:3px;font-size:9px;color:#737373;letter-spacing:.08em;text-transform:uppercase}
+.settingsClose{
+  width:34px;height:34px;border:0;border-radius:9px;background:#252525;color:#aaa;
+  display:grid;place-items:center;font-size:21px;line-height:1;cursor:pointer;
+}
+.settingsClose:hover{background:#303030;color:#fff}
+.settingsBody{padding:8px}
+.settingsAction{
+  width:100%;
+  min-height:44px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#fff;
+  text-align:left;
+  padding:0 12px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:550;
+  transition:background .12s ease,color .12s ease,transform .12s ease;
+}
+.settingsAction:hover{background:#272727;transform:translateX(1px)}
+.settingsAction:disabled{color:#5f5f5f;cursor:not-allowed;background:transparent;transform:none}
+.settingsModal .menuDivider{height:1px;background:rgba(255,255,255,.09);margin:7px 3px}
+.settingsToggleRow{
+  min-height:61px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:7px 10px;
+}
+.toggleLabel{font-size:12px;font-weight:700;color:#fff}
+.toggleHint{margin-top:4px;font-size:9px;color:#737373}
+.rpcSwitch{
+  position:relative;
+  flex:0 0 auto;
+  width:76px;height:34px;
+  border:1px solid transparent;
+  border-radius:999px;
+  padding:0;
+  cursor:pointer;
+  overflow:hidden;
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.rpcSwitch.off{background:#7c2529;border-color:#a23d42;box-shadow:inset 0 0 12px rgba(0,0,0,.28),0 0 10px rgba(219,57,67,.12)}
+.rpcSwitch.on{background:#1c8d45;border-color:#31ba64;box-shadow:inset 0 0 12px rgba(0,0,0,.18),0 0 13px rgba(42,223,101,.2)}
+.rpcKnob{
+  position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;
+  box-shadow:0 2px 7px rgba(0,0,0,.38);transition:transform .2s cubic-bezier(.2,.8,.2,1);
+}
+.rpcSwitch.on .rpcKnob{transform:translateX(42px)}
+.rpcStateText{
+  position:absolute;top:50%;transform:translateY(-50%);font-size:9px;font-weight:900;letter-spacing:.08em;color:#fff;
+  right:11px;
+}
+.rpcSwitch.on .rpcStateText{right:auto;left:11px}
+.rpcSwitch:disabled{opacity:.45;cursor:not-allowed}
+@keyframes settingsBackdropIn{from{opacity:0}to{opacity:1}}
+@keyframes settingsModalIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+
+/* v1.8 launcher polish */
+.settingsModal{width:min(430px,calc(100vw - 120px));background:linear-gradient(180deg,rgba(26,27,30,.98),rgba(15,16,18,.98));border-color:rgba(255,255,255,.11);box-shadow:0 34px 100px rgba(0,0,0,.68),0 0 40px color-mix(in srgb,var(--server-accent) 9%,transparent)}
+.settingsBody{padding:10px 10px 12px}
+.settingsSectionLabel{padding:10px 11px 5px;color:#737982;font-size:9px;font-weight:900;letter-spacing:.14em}
+.settingsToggleRow{border-radius:10px;transition:background .14s ease}
+.settingsToggleRow:hover{background:rgba(255,255,255,.035)}
+.settingsAction{display:flex;align-items:center;min-height:46px;padding:0 12px;border:1px solid transparent}
+.settingsAction:hover{background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border-color:rgba(255,255,255,.055);transform:none}
+
+.playersInfo b{color:var(--player-count-color,#59e787)!important;text-shadow:0 0 12px color-mix(in srgb,var(--player-count-color,#59e787) 32%,transparent)}
+.statusBadge.online{color:var(--status-online-color,#43df75)!important;border-color:color-mix(in srgb,var(--status-online-color,#43df75) 36%,transparent)!important}
+.statusBadge.maintenance{color:var(--status-maintenance-color,#f2b84b)!important;border-color:color-mix(in srgb,var(--status-maintenance-color,#f2b84b) 36%,transparent)!important}
+.statusBadge.offline{color:var(--status-offline-color,#9b9b9b)!important;border-color:color-mix(in srgb,var(--status-offline-color,#9b9b9b) 30%,transparent)!important}
+
+/* Replaces Chromium title tooltips with an RG launcher card. */
+.railTooltip{
+  position:absolute;z-index:140;min-width:230px;max-width:310px;padding:12px 13px;
+  transform:translateY(-50%);pointer-events:none;border:1px solid rgba(255,255,255,.12);border-radius:12px;
+  background:linear-gradient(145deg,rgba(28,30,34,.98),rgba(13,14,16,.98));
+  box-shadow:0 18px 52px rgba(0,0,0,.62),0 0 0 1px rgba(0,0,0,.45),0 0 26px color-mix(in srgb,var(--server-accent) 10%,transparent);
+  backdrop-filter:blur(18px);animation:rgTooltipIn .13s cubic-bezier(.2,.75,.2,1)
+}
+.railTooltip::before{content:"";position:absolute;left:-6px;top:50%;width:10px;height:10px;transform:translateY(-50%) rotate(45deg);background:#191b1e;border-left:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}
+.tooltipTop{display:flex;align-items:center;gap:10px;min-width:0}
+.tooltipIcon{width:38px;height:38px;flex:0 0 38px;border-radius:9px;object-fit:cover;border:1px solid rgba(255,255,255,.12);box-shadow:0 5px 16px rgba(0,0,0,.4)}
+.tooltipName{color:#fff;font-size:12px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tooltipStatus{margin-top:3px;font-size:8px;font-weight:950;letter-spacing:.12em}
+.tooltipStatus.online{color:#55e886}.tooltipStatus.maintenance{color:#f2ba4a}.tooltipStatus.offline{color:#9b9b9b}.tooltipStatus.neutral{color:#699ff5}
+.tooltipMeta{margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07);color:#9298a1;font-size:9px;line-height:1.45}
+@keyframes rgTooltipIn{from{opacity:0;transform:translate(5px,-50%) scale(.97)}to{opacity:1;transform:translate(0,-50%) scale(1)}}
+
+.serverIcon{overflow:visible}
+.serverIcon img,.serverIcon .iconFallback{border-radius:10px;overflow:hidden}
+.serverIcon.online:hover{transform:translateY(-2px) scale(1.035);border-color:color-mix(in srgb,var(--server-accent) 62%,#fff);box-shadow:0 8px 20px rgba(0,0,0,.38),0 0 18px color-mix(in srgb,var(--server-accent) 17%,transparent)}
+.serverIcon.offline:hover,.serverIcon.maintenance:hover{transform:none;border-color:rgba(255,255,255,.08)}
+.serverIcon.selected{border-color:var(--server-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--server-accent) 30%,transparent),0 0 18px color-mix(in srgb,var(--server-accent) 16%,transparent)}
+
+.diagnosticsBackdrop{position:absolute;inset:0;z-index:160;display:grid;place-items:center;background:rgba(0,0,0,.62);backdrop-filter:blur(10px);-webkit-app-region:no-drag}
+.diagnosticsModal{width:min(500px,calc(100vw - 140px));overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#1b1c1f,#111214);box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.diagnosticsList{padding:10px 12px 14px;display:grid;gap:7px}
+.diagnosticRow{display:flex;align-items:flex-start;gap:9px;padding:10px 11px;border-radius:9px;background:rgba(255,255,255,.035);font-size:11px;line-height:1.4;color:#cfd2d7}
+.diagnosticRow.ok .diagIcon{color:#59e787}.diagnosticRow.bad .diagIcon{color:#ff6c76}.diagIcon{font-size:14px;font-weight:900;line-height:1}
+.launchMessage.error,.launchMessage.success{cursor:pointer}
+.launchMessage.error:hover,.launchMessage.success:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* v1.8.2 — compact server-name hover */
+.railTooltip.serverNameOnly{
+  min-width:0;
+  width:auto;
+  max-width:220px;
+  padding:9px 12px;
+  border-radius:9px;
+}
+.railTooltip.serverNameOnly .tooltipTop{gap:0}
+.railTooltip.serverNameOnly .tooltipName{font-size:11px;font-weight:800;letter-spacing:.01em}
+.railTooltip.serverNameOnly .tooltipStatus,
+.railTooltip.serverNameOnly .tooltipMeta,
+.railTooltip.serverNameOnly .tooltipIcon{display:none!important}
