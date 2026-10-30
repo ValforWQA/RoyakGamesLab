@@ -1,0 +1,16 @@
+RoyakGamesLab combined settings and game-window patch
+
+- Moved performance profiles, quality, FPS targets and FPS counter switch to Launcher Settings.
+- Game window no longer contains the performance settings button/panel.
+- Optional small callback-rate counter remains in game window when enabled.
+- Each game has a separate top-level window, independent Ruffle player and separate socket bridge.
+- 'Multiple game instances' toggle now controls duplicate launches of the SAME game; when disabled an existing game is focused instead.
+- Game windows are shown/focused after loading, rather than remaining behind the launcher.
+- Launcher preferences persist in Electron userData; per-game performance options can be set in Settings.
+- Existing SWFs, Java Kaiden Engine, PHP controller, and socket transport unchanged.
+
+IMPORTANT: FPS target is advisory, not a hard Ruffle SWF frame-rate override. The counter shows requestAnimationFrame callback rate, not actual SWF simulation FPS. Quality may require reopening game.
+Windows taskbar grouping and process executable name depend on installed/packaged Electron app identity; dev-mode electron.exe cannot be renamed by changing window title.
+
+TEST: npm install && npm start
+PACKAGE: npm run dist

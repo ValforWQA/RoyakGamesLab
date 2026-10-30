@@ -1,0 +1,1 @@
+RoyakRuffle diagnostic build. Added player error reporting, console and failed HTTP logging, and allowScriptAccess player option. Original launcher and vendor WASM preserved. Inspect terminal output after npm start. No guarantee this fixes the AS3 Error! message.
