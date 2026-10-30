@@ -1,7 +1,0 @@
-RoyakGamesLab game window improvements
-- Loading label: Initializing KaidenEngine...
-- Ruffle player stretches to window bounds with exactfit (may alter aspect ratio).
-- Each game window uses server.name and the game artwork when available.
-- Existing _blank interception opens HTTP(S) URLs in Windows default browser; no extra Electron popup.
-- Existing socket bridge and GameFileController are unchanged.
-- Artwork is loaded only from configured allowed HTTPS origins; fallback is launcher icon.
